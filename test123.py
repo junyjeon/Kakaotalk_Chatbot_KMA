@@ -1,8 +1,6 @@
 import requests
 import json
-import tkinter as tk
 import matplotlib.pyplot as plt
-matplotlib.use('TkAgg')
 
 url='http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst'
 key='+OkWyS+jCSbH8iy6EgVNtvfDxfKo9ImIII2zL/qdiWXOzs0u5aNFjpZ782duf46IjgD99p9VA5BmiSS8IeosQw=='

@@ -4,19 +4,26 @@ import datetime
 import openai
 
 # Set OpenAI API key
-openai.api_key = "2tVIlhDk964yyk17sm5TT3BlbkFJkYWiGlypwwB0F78n6rLa"
+openai.api_key = "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"
 
 # KakaoTalk API URL and Access Token
-url = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
-access_token = "nREu6jZeWw8KDN9xZ2nxtZX4mEk2umhk83FxPpUKCj1ylwAAAYeqzph8"
+url = "https://kauth.kakao.com/oauth/token"
+data = {
+    "grant_type": "authorization_code",
+    "client_id": "a9cfd4733d9e91bf1becfe22f8c65fa7",
+    "redirect_uri": "https://localhost:3000",
+    "code": "Mf3LuQkPaNW0XJoA5p3S7tKP74lIrXewtaUn3yIZGw4V_zBx5viZcRzWrKvUelRDqLlcmQo9c00AAAGHryWj3Q",
+}
+kakao_response = requests.post(url, data=data)
+access_token = kakao_response.json()
 
 # KMA API URL and API key
 weather_url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst"
-api_key = "MnGOdrqbM1wstw7ArZGsMENbxjYa7BTcueKzvEq9fGn22H9OqprbGL1MhAbOtS6LBVShAAjpM/qAnsc5Ia9ntA=="
+api_key = '+OkWyS+jCSbH8iy6EgVNtvfDxfKo9ImIII2zL/qdiWXOzs0u5aNFjpZ782duf46IjgD99p9VA5BmiSS8IeosQw=='
 
 # Location information (latitude, longitude)
-nx = "your_x_coordinate"
-ny = "your_y_coordinate"
+nx = "60"
+ny = "127"
 
 # Fine dust level API URL
 dust_url = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty"
@@ -24,24 +31,33 @@ dust_url = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRl
 # Get current weather data
 weather_response = requests.get(weather_url, params={
     "serviceKey": api_key,
-    "numOfRows": 1,
+    "numOfRows": 10,
     "pageNo": 1,
-    "dataType": "JSON",
-    "base_date": datetime.datetime.today().strftime("%Y%m%d"),
+    'dataType' : 'json',
+    #"base_date": datetime.datetime.today().strftime("%Y%m%d"),
+    "base_date": "20230423",
     "base_time": datetime.datetime.now().strftime("%H%M"),
     "nx": nx,
-    "ny": ny
+    "ny": ny,
 })
+#print('weather_response: ', weather_response);
+#print('weather_response.text: ', weather_response.text);
 weather_data = json.loads(weather_response.text)
+print('weather_data: ', weather_data);
 
 # Get fine dust level data
 dust_response = requests.get(dust_url, params={
-    "stationName": "your_station_name",
-    "dataTerm": "DAILY",
+    "stationName": "종로구",
+    #"dataTerm": "DAILY",
+    "dataTerm": "MONTH",
     "ver": "1.0",
-    "serviceKey": "your_service_key"
+    "serviceKey": api_key,
+    "returnType": 'json',
 })
+#print('dust_response: ', dust_response);
+#print('dust_response.text: ', dust_response.text);
 dust_data = json.loads(dust_response.text)
+print('dust_data: ', dust_data);
 
 # Extract relevant weather information
 weather_description = weather_data['response']['body']['items']['item'][0]['fcstValue']
@@ -52,14 +68,16 @@ forecast = weather_data['response']['body']['items']['item'][4]['fcstValue']
 
 # Use ChatGPT to generate weather forecast from a 10-year weathercaster's perspective
 prompt = f"As a 10-year weathercaster, I predict that today's weather will be {forecast}."
+print('prompt: ', prompt);
 response = openai.Completion.create(
     engine="davinci",
     prompt=prompt,
-    max_tokens=100,
+    max_tokens=200,
     n=1,
     stop=None,
     temperature=0.7,
 )
+print('openAI response: ', response);
 forecast_10_year = response.choices[0].text.strip()
 
 # Determine what clothes to wear based on current temperature
@@ -92,6 +110,24 @@ else:
 message = f"Good morning! As a 10-year weathercaster, I predict that today's weather will be {forecast_10_year}. The current temperature is {current_temp}°C with a humidity of {current_humidity}% and wind speed of {wind_speed}m/s. {clothing_recommendation} {dust_recommendation}"
 
 # Send the message via KakaoTalk API
+
+# kakaoTalkAppId = "898290"
+# kakaoTalkRestKey = "a9cfd4733d9e91bf1becfe22f8c65fa7"
+
+# kakaoTalk_response = requests.get("http:/kapi.kakao.com/v1/user/access_token_info", params={
+#     "serviceKey": api_key,
+#     "numOfRows": 10,
+#     "pageNo": 1,
+#     'dataType' : 'json',
+#     #"base_date": datetime.datetime.today().strftime("%Y%m%d"),
+#     "base_date": "20230423",
+#     "base_time": datetime.datetime.now().strftime("%H%M"),
+#     "nx": nx,
+#     "ny": ny,
+# })
+# weather_data = json.loads(weather_response.text)
+# print('weather_data: ', weather_data);
+
 headers = {'Authorization': f'Bearer {access_token}'}
 data = {'template_object': json.dumps({'text': message})}
 response = requests.post(url, headers=headers, data=data)
