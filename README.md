@@ -4,7 +4,7 @@
 <br>
 Kakaotalk_Chatbot_KMA
 </h1>
-<h3 align="center">📍 The Power of kma_api: Unleashing New Possibilities!</h3>
+<h3 align="center">📍 The Power of Kakaotalk_Chatbot_KMA: Unleashing New Possibilities!</h3>
 <h3 align="center">🚀 Developed with the software and tools below.</h3>
 <p align="center">
 
