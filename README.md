@@ -2,7 +2,7 @@
 <h1 align="center">
 <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/ec559a9f6bfd399b82bb44393651661b08aaf7ba/icons/folder-markdown-open.svg" width="100" />
 <br>
-kma_api
+Kakaotalk_Chatbot_KMA
 </h1>
 <h3 align="center">📍 The Power of kma_api: Unleashing New Possibilities!</h3>
 <h3 align="center">🚀 Developed with the software and tools below.</h3>
