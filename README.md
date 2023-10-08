@@ -34,7 +34,7 @@ Kakaotalk_Chatbot_KMA
 
 ## 📍Overview
 
-The Kakaotalk_Chatbot_KMA project is a set of functions for PHP which allows developers to incorporate functionality from the Korean Meteorological Administration (KMA) API into their web services and applications. This
+The Kakaotalk_Chatbot_KMA project is a set of functions for PHP which allows developers to incorporate functionality from the Korean Meteorological Administration (KMA) API into their web services and applications.
 
 ## 🔮 Feautres
 
